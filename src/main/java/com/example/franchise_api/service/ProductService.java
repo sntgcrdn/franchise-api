@@ -1,28 +1,49 @@
 package com.example.franchise_api.service;
 
+import com.example.franchise_api.dto.request.ProductRequestDTO;
+import com.example.franchise_api.dto.response.ProductResponseDTO;
 import com.example.franchise_api.entity.Product;
+import com.example.franchise_api.entity.Branch;
+import com.example.franchise_api.mapper.ProductMapper;
 import com.example.franchise_api.repository.ProductRepository;
+import com.example.franchise_api.repository.BranchRepository;
+
+import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
+@Service
 public class ProductService {
+
     private final ProductRepository productRepository;
+    private final BranchRepository branchRepository;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, BranchRepository branchRepository) {
         this.productRepository = productRepository;
+        this.branchRepository = branchRepository;
     }
 
-    public List<Product> getAllProducts() {
-        return productRepository.findAll();
+    public List<ProductResponseDTO> getAllProducts() {
+        return productRepository.findAll()
+                .stream()
+                .map(ProductMapper::toResponse)
+                .collect(Collectors.toList());
     }
 
-    public Optional<Product> getProductById(Long id) {
-        return productRepository.findById(id);
+    public ProductResponseDTO getProductById(Long id) {
+        return productRepository.findById(id)
+                .map(ProductMapper::toResponse)
+                .orElse(null);
     }
 
-    public Product saveProduct(Product product) {
-        return productRepository.save(product);
+    public ProductResponseDTO createProduct(ProductRequestDTO dto) {
+        Branch branch = branchRepository.findById(dto.getBranchId())
+                .orElseThrow(() -> new RuntimeException("Branch not found with ID: " + dto.getBranchId()));
+
+        Product product = ProductMapper.toEntity(dto, branch);
+        Product saved = productRepository.save(product);
+        return ProductMapper.toResponse(saved);
     }
 
     public void deleteProduct(Long id) {
