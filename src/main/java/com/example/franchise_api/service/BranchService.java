@@ -49,4 +49,24 @@ public class BranchService {
     public void deleteBranch(Long id) {
         branchRepository.deleteById(id);
     }
+
+    public BranchResponseDTO updateBranch(Long id, BranchRequestDTO dto) {
+        return branchRepository.findById(id).map(branch -> {
+            // Actualiza campos
+            branch.setName(dto.getName());
+            branch.setCity(dto.getCity());
+            branch.setAddress(dto.getAddress());
+    
+            // Actualiza la franquicia si viene un franchiseId
+            if (dto.getFranchiseId() != null) {
+                Franchise franchise = franchiseRepository.findById(dto.getFranchiseId())
+                        .orElseThrow(() -> new RuntimeException("Franchise not found with ID: " + dto.getFranchiseId()));
+                branch.setFranchise(franchise);
+            }
+    
+            // Guarda cambios
+            Branch saved = branchRepository.save(branch);
+            return BranchMapper.toResponse(saved);
+        }).orElse(null);
+    }
 }
