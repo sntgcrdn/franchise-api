@@ -57,4 +57,13 @@ public class FranchiseService {
 
         return topProducts;
     }
+
+    public Optional<Franchise> updateFranchiseName(Long id, String newName) {
+        return franchiseRepository.findById(id)
+                .map(franchise -> {
+                    franchise.setName(newName);
+                    franchiseRepository.save(franchise);
+                    return franchise;
+                });
+    }
 }

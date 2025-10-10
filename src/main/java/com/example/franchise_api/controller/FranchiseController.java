@@ -55,4 +55,13 @@ public class FranchiseController {
     public List<TopStockProductResponseDTO> getTopStockProducts(@PathVariable Long id) {
         return franchiseService.getTopStockProducts(id);
     }
+
+    @PatchMapping("/{id}/name")
+    public ResponseEntity<Franchise> updateFranchiseName(
+            @PathVariable Long id,
+            @RequestBody String newName) {
+        return franchiseService.updateFranchiseName(id, newName)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
 }
