@@ -69,4 +69,14 @@ public class BranchService {
             return BranchMapper.toResponse(saved);
         }).orElse(null);
     }
+
+    public BranchResponseDTO updateBranchName(Long id, String newName) {
+        return branchRepository.findById(id)
+                .map(branch -> {
+                    branch.setName(newName);
+                    branchRepository.save(branch);
+                    return BranchMapper.toResponse(branch);
+                })
+                .orElse(null);
+    }
 }
