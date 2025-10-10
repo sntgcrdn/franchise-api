@@ -16,6 +16,7 @@ import com.example.franchise_api.dto.response.BranchResponseDTO;
 import com.example.franchise_api.service.BranchService;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping ("/branches")
@@ -59,10 +60,11 @@ public class BranchController {
                 : ResponseEntity.notFound().build();
     }
 
-    @PatchMapping("/{id}/name")
+    @PatchMapping("/{id}/updatename")
     public ResponseEntity<BranchResponseDTO> updateBranchName(
             @PathVariable Long id,
-            @RequestBody String newName) {
+            @RequestBody Map<String, String> requestBody) {
+        String newName = requestBody.get("name");
         BranchResponseDTO updated = branchService.updateBranchName(id, newName);
         return updated != null ? ResponseEntity.ok(updated) : ResponseEntity.notFound().build();
     }

@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java .util.Map;
 
 @RestController
 @RequestMapping("/franchises")
@@ -56,10 +57,11 @@ public class FranchiseController {
         return franchiseService.getTopStockProducts(id);
     }
 
-    @PatchMapping("/{id}/name")
+    @PatchMapping("/{id}/updatename")
     public ResponseEntity<Franchise> updateFranchiseName(
             @PathVariable Long id,
-            @RequestBody String newName) {
+            @RequestBody Map<String, String> requestBody) {
+        String newName = requestBody.get("name");
         return franchiseService.updateFranchiseName(id, newName)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());

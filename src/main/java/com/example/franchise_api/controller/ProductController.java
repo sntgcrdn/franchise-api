@@ -9,6 +9,7 @@ import com.example.franchise_api.dto.response.ProductResponseDTO;
 import com.example.franchise_api.service.ProductService;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/products")
@@ -59,10 +60,11 @@ public class ProductController {
         return ResponseEntity.ok(productService.updateProductStock(id, dto));
     }
 
-    @PatchMapping("/{id}/name")
+    @PatchMapping("/{id}/updatename")
     public ResponseEntity<ProductResponseDTO> updateProductName(
             @PathVariable Long id,
-            @RequestBody String newName) {
+            @RequestBody Map<String, String> requestBody) {
+        String newName = requestBody.get("name");
         ProductResponseDTO updated = productService.updateProductName(id, newName);
         return updated != null ? ResponseEntity.ok(updated) : ResponseEntity.notFound().build();
     }
