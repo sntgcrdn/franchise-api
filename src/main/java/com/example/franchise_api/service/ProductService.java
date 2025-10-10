@@ -1,6 +1,7 @@
 package com.example.franchise_api.service;
 
 import com.example.franchise_api.dto.request.ProductRequestDTO;
+import com.example.franchise_api.dto.request.ProductStockDTO;
 import com.example.franchise_api.dto.response.ProductResponseDTO;
 import com.example.franchise_api.entity.Product;
 import com.example.franchise_api.entity.Branch;
@@ -69,5 +70,17 @@ public class ProductService {
             Product saved = productRepository.save(product);
             return ProductMapper.toResponse(saved);
         }).orElse(null);
+    }
+
+    public ProductResponseDTO updateProductStock(Long productId, ProductStockDTO dto) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new RuntimeException("Product not found with ID: " + productId));
+        
+        if (dto.getStock() != null) {
+            product.setStock(dto.getStock());
+        }
+
+        Product updated = productRepository.save(product);
+        return ProductMapper.toResponse(updated);
     }
 }

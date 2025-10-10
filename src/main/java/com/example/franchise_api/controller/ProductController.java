@@ -4,6 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.franchise_api.dto.request.ProductRequestDTO;
+import com.example.franchise_api.dto.request.ProductStockDTO;
 import com.example.franchise_api.dto.response.ProductResponseDTO;
 import com.example.franchise_api.service.ProductService;
 
@@ -49,5 +50,12 @@ public class ProductController {
         return updatedProduct != null
                 ? ResponseEntity.ok(updatedProduct)
                 : ResponseEntity.notFound().build();
+    }
+
+    @PatchMapping("/{id}/stock")
+    public ResponseEntity<ProductResponseDTO> updateStock(
+            @PathVariable Long id,
+            @RequestBody ProductStockDTO dto) {
+        return ResponseEntity.ok(productService.updateProductStock(id, dto));
     }
 }

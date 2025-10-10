@@ -15,4 +15,5 @@ public class ProductRequestDTO {
     private String category;
     private Long branchId;
     private String description;
-}
+    private Integer stock;
+}  

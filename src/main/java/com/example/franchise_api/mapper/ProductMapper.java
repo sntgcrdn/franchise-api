@@ -26,6 +26,7 @@ public class ProductMapper {
                 .name(product.getName())
                 .price(product.getPrice())
                 .category(product.getCategory())
+                .stock(product.getStock())
                 .branchName(branch != null ? branch.getName() : null)
                 .branch(branchSummary)
                 .build();
@@ -36,8 +37,10 @@ public class ProductMapper {
 
         return Product.builder()
                 .name(dto.getName())
+                .description(dto.getDescription())
                 .price(dto.getPrice())
                 .category(dto.getCategory())
+                .stock(dto.getStock())
                 .branch(branch)
                 .build();
     }
