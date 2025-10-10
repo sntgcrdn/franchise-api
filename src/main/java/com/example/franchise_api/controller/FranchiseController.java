@@ -1,5 +1,6 @@
 package com.example.franchise_api.controller;
 
+import com.example.franchise_api.dto.response.TopStockProductResponseDTO;
 import com.example.franchise_api.entity.Franchise;
 import com.example.franchise_api.service.FranchiseService;
 import org.springframework.http.ResponseEntity;
@@ -48,5 +49,10 @@ public class FranchiseController {
     public ResponseEntity<Void> deleteFranchise(@PathVariable Long id) {
         franchiseService.deleteFranchise(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{id}/top-stock-products")
+    public List<TopStockProductResponseDTO> getTopStockProducts(@PathVariable Long id) {
+        return franchiseService.getTopStockProducts(id);
     }
 }
