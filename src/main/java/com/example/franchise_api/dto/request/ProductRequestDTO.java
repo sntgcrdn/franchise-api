@@ -14,4 +14,5 @@ public class ProductRequestDTO {
     private Double price;
     private String category;
     private Long branchId;
+    private String description;
 }

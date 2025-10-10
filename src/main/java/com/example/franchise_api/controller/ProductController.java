@@ -40,4 +40,14 @@ public class ProductController {
         productService.deleteProduct(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ProductResponseDTO> updateProduct(
+            @PathVariable Long id,
+            @RequestBody ProductRequestDTO dto) {
+        ProductResponseDTO updatedProduct = productService.updateProduct(id, dto);
+        return updatedProduct != null
+                ? ResponseEntity.ok(updatedProduct)
+                : ResponseEntity.notFound().build();
+    }
 }

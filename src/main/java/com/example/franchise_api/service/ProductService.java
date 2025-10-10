@@ -49,4 +49,25 @@ public class ProductService {
     public void deleteProduct(Long id) {
         productRepository.deleteById(id);
     }
+
+    public ProductResponseDTO updateProduct(Long id, ProductRequestDTO dto) {
+        return productRepository.findById(id).map(product -> {
+            product.setName(dto.getName());
+            product.setDescription(dto.getDescription());
+            product.setPrice(dto.getPrice());
+            if (dto.getCategory() != null) {
+                product.setCategory(dto.getCategory());
+            }
+    
+            // Si necesitas actualizar la sucursal:
+            if (dto.getBranchId() != null) {
+                Branch branch = branchRepository.findById(dto.getBranchId())
+                        .orElseThrow(() -> new RuntimeException("Branch not found with ID: " + dto.getBranchId()));
+                product.setBranch(branch);
+            }
+    
+            Product saved = productRepository.save(product);
+            return ProductMapper.toResponse(saved);
+        }).orElse(null);
+    }
 }

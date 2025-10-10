@@ -18,7 +18,7 @@ public class Product {
 
     @Column(nullable = false)
     private String name;
-
+    private String description; 
     private Double price;
 
     private String category;
