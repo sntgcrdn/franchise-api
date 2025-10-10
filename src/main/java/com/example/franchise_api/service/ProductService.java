@@ -83,4 +83,14 @@ public class ProductService {
         Product updated = productRepository.save(product);
         return ProductMapper.toResponse(updated);
     }
+
+    public ProductResponseDTO updateProductName(Long id, String newName) {
+        return productRepository.findById(id)
+                .map(product -> {
+                    product.setName(newName);
+                    productRepository.save(product);
+                    return ProductMapper.toResponse(product);
+                })
+                .orElse(null);
+    }
 }

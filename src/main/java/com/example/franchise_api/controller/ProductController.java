@@ -58,4 +58,12 @@ public class ProductController {
             @RequestBody ProductStockDTO dto) {
         return ResponseEntity.ok(productService.updateProductStock(id, dto));
     }
+
+    @PatchMapping("/{id}/name")
+    public ResponseEntity<ProductResponseDTO> updateProductName(
+            @PathVariable Long id,
+            @RequestBody String newName) {
+        ProductResponseDTO updated = productService.updateProductName(id, newName);
+        return updated != null ? ResponseEntity.ok(updated) : ResponseEntity.notFound().build();
+    }
 }
