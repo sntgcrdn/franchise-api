@@ -1,5 +1,6 @@
 package com.example.franchise_api.controller;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,44 +29,49 @@ public class ProductController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ProductResponseDTO> getProductById(@PathVariable Long id) {
-        ProductResponseDTO product = productService.getProductById(id);
-        return product != null ? ResponseEntity.ok(product) : ResponseEntity.notFound().build();
+        return productService.getProductById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
     public ResponseEntity<ProductResponseDTO> createProduct(@RequestBody ProductRequestDTO dto) {
-        return ResponseEntity.ok(productService.createProduct(dto));
+        return productService.createProduct(dto)
+                .map(created -> ResponseEntity.status(HttpStatus.CREATED).body(created))
+                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build()); // branch not found -> 404
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
-        productService.deleteProduct(id);
-        return ResponseEntity.noContent().build();
+        boolean deleted = productService.deleteProduct(id);
+        return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProductResponseDTO> updateProduct(
-            @PathVariable Long id,
-            @RequestBody ProductRequestDTO dto) {
-        ProductResponseDTO updatedProduct = productService.updateProduct(id, dto);
-        return updatedProduct != null
-                ? ResponseEntity.ok(updatedProduct)
-                : ResponseEntity.notFound().build();
+    public ResponseEntity<ProductResponseDTO> updateProduct(@PathVariable Long id,
+                                                            @RequestBody ProductRequestDTO dto) {
+        return productService.updateProduct(id, dto)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PatchMapping("/{id}/stock")
-    public ResponseEntity<ProductResponseDTO> updateStock(
-            @PathVariable Long id,
-            @RequestBody ProductStockDTO dto) {
-        return ResponseEntity.ok(productService.updateProductStock(id, dto));
+    public ResponseEntity<ProductResponseDTO> updateStock(@PathVariable Long id,
+                                                          @RequestBody ProductStockDTO dto) {
+        return productService.updateProductStock(id, dto)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
+
 
     @PatchMapping("/{id}/updatename")
     public ResponseEntity<ProductResponseDTO> updateProductName(
             @PathVariable Long id,
             @RequestBody Map<String, String> requestBody) {
         String newName = requestBody.get("name");
-        ProductResponseDTO updated = productService.updateProductName(id, newName);
-        return updated != null ? ResponseEntity.ok(updated) : ResponseEntity.notFound().build();
+
+        return productService.updateProductName(id, newName)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 }

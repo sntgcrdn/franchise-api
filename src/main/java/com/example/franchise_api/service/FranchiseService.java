@@ -1,19 +1,18 @@
 package com.example.franchise_api.service;
 
 import com.example.franchise_api.dto.response.TopStockProductResponseDTO;
-import com.example.franchise_api.entity.Branch;
 import com.example.franchise_api.entity.Franchise;
 import com.example.franchise_api.entity.Product;
 import com.example.franchise_api.repository.FranchiseRepository;
+
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Comparator;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class FranchiseService {
+
     private final FranchiseRepository franchiseRepository;
 
     public FranchiseService(FranchiseRepository franchiseRepository) {
@@ -35,35 +34,34 @@ public class FranchiseService {
     public void deleteFranchise(Long id) {
         franchiseRepository.deleteById(id);
     }
-    public List<TopStockProductResponseDTO> getTopStockProducts(Long franchiseId) {
-        Franchise franchise = franchiseRepository.findById(franchiseId)
-                .orElseThrow(() -> new RuntimeException("Franchise not found with ID: " + franchiseId));
-
-        List<TopStockProductResponseDTO> topProducts = new ArrayList<>();
-
-        for (Branch branch : franchise.getBranches()) {
-            branch.getProducts().stream()
-                    .max(Comparator.comparingInt(Product::getStock))
-                    .ifPresent(product -> topProducts.add(
-                            new TopStockProductResponseDTO(
-                                    product.getId(),
-                                    product.getName(),
-                                    product.getStock(),
-                                    branch.getId(),
-                                    branch.getName()
-                            )
-                    ));
-        }
-
-        return topProducts;
-    }
 
     public Optional<Franchise> updateFranchiseName(Long id, String newName) {
         return franchiseRepository.findById(id)
                 .map(franchise -> {
                     franchise.setName(newName);
-                    franchiseRepository.save(franchise);
-                    return franchise;
+                    return franchiseRepository.save(franchise);
                 });
+    }
+
+    public List<TopStockProductResponseDTO> getTopStockProducts(Long franchiseId) {
+        return franchiseRepository.findById(franchiseId)
+                .map(franchise -> franchise.getBranches()
+                        .stream()
+                        .map(branch -> branch.getProducts()
+                                .stream()
+                                .max(Comparator.comparingInt(Product::getStock))
+                                .map(product -> new TopStockProductResponseDTO(
+                                        product.getId(),
+                                        product.getName(),
+                                        product.getStock(),
+                                        branch.getId(),
+                                        branch.getName()
+                                ))
+                                .orElse(null)
+                        )
+                        .filter(Objects::nonNull)
+                        .collect(Collectors.toList())
+                )
+                .orElse(Collections.emptyList());
     }
 }

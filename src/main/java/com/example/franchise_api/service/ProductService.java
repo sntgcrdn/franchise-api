@@ -12,6 +12,7 @@ import com.example.franchise_api.repository.BranchRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,26 +33,31 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
-    public ProductResponseDTO getProductById(Long id) {
+    public Optional<ProductResponseDTO> getProductById(Long id) {
         return productRepository.findById(id)
-                .map(ProductMapper::toResponse)
-                .orElse(null);
+                .map(ProductMapper::toResponse);
     }
 
-    public ProductResponseDTO createProduct(ProductRequestDTO dto) {
-        Branch branch = branchRepository.findById(dto.getBranchId())
-                .orElseThrow(() -> new RuntimeException("Branch not found with ID: " + dto.getBranchId()));
+    public Optional<ProductResponseDTO> createProduct(ProductRequestDTO dto) {
+        Optional<Branch> branchOpt = branchRepository.findById(dto.getBranchId());
+        if (branchOpt.isEmpty()) {
+            return Optional.empty();
+        }
 
-        Product product = ProductMapper.toEntity(dto, branch);
+        Product product = ProductMapper.toEntity(dto, branchOpt.get());
         Product saved = productRepository.save(product);
-        return ProductMapper.toResponse(saved);
+        return Optional.of(ProductMapper.toResponse(saved));
     }
 
-    public void deleteProduct(Long id) {
+    public boolean deleteProduct(Long id) {
+        if (!productRepository.existsById(id)) {
+            return false;
+        }
         productRepository.deleteById(id);
+        return true;
     }
 
-    public ProductResponseDTO updateProduct(Long id, ProductRequestDTO dto) {
+    public Optional<ProductResponseDTO> updateProduct(Long id, ProductRequestDTO dto) {
         return productRepository.findById(id).map(product -> {
             product.setName(dto.getName());
             product.setDescription(dto.getDescription());
@@ -59,38 +65,34 @@ public class ProductService {
             if (dto.getCategory() != null) {
                 product.setCategory(dto.getCategory());
             }
-    
-            // Si necesitas actualizar la sucursal:
+
             if (dto.getBranchId() != null) {
                 Branch branch = branchRepository.findById(dto.getBranchId())
                         .orElseThrow(() -> new RuntimeException("Branch not found with ID: " + dto.getBranchId()));
                 product.setBranch(branch);
             }
-    
+
             Product saved = productRepository.save(product);
             return ProductMapper.toResponse(saved);
-        }).orElse(null);
+        });
     }
 
-    public ProductResponseDTO updateProductStock(Long productId, ProductStockDTO dto) {
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new RuntimeException("Product not found with ID: " + productId));
-        
-        if (dto.getStock() != null) {
-            product.setStock(dto.getStock());
-        }
-
-        Product updated = productRepository.save(product);
-        return ProductMapper.toResponse(updated);
+    public Optional<ProductResponseDTO> updateProductStock(Long productId, ProductStockDTO dto) {
+        return productRepository.findById(productId).map(product -> {
+            if (dto.getStock() != null) {
+                product.setStock(dto.getStock());
+            }
+            Product updated = productRepository.save(product);
+            return ProductMapper.toResponse(updated);
+        });
     }
 
-    public ProductResponseDTO updateProductName(Long id, String newName) {
+    public Optional<ProductResponseDTO> updateProductName(Long id, String newName) {
         return productRepository.findById(id)
                 .map(product -> {
                     product.setName(newName);
-                    productRepository.save(product);
-                    return ProductMapper.toResponse(product);
-                })
-                .orElse(null);
+                    Product saved = productRepository.save(product);
+                    return ProductMapper.toResponse(saved);
+                });
     }
 }
