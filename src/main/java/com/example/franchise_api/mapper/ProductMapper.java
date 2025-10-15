@@ -27,6 +27,7 @@ public class ProductMapper {
                 .price(product.getPrice())
                 .category(product.getCategory())
                 .stock(product.getStock())
+                .description(product.getDescription())
                 .branchName(branch != null ? branch.getName() : null)
                 .branch(branchSummary)
                 .build();

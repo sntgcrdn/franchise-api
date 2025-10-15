@@ -5,7 +5,6 @@ import com.example.franchise_api.dto.request.ProductStockDTO;
 import com.example.franchise_api.dto.response.ProductResponseDTO;
 import com.example.franchise_api.entity.Branch;
 import com.example.franchise_api.entity.Product;
-import com.example.franchise_api.mapper.ProductMapper;
 import com.example.franchise_api.repository.ProductRepository;
 import com.example.franchise_api.repository.BranchRepository;
 import org.junit.jupiter.api.BeforeEach;

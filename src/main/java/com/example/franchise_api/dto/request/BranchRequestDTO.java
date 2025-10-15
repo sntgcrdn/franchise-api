@@ -11,10 +11,4 @@ public class BranchRequestDTO {
     private String city;
     private String address;
     private Long franchiseId;
-    //private FranchiseSummaryDTO franchise;
 }
-
-//public class FranchiseSummaryDTO {
-//    private Long id;
-//    private String name;
-//}
