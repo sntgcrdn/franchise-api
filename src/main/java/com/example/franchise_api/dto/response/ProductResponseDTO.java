@@ -16,5 +16,6 @@ public class ProductResponseDTO {
     private String category;
     private String branchName;
     private Integer stock;
+    private String description;
     private BranchSummaryDTO branch;
 }
