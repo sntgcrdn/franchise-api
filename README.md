@@ -1,147 +1,201 @@
-# Franchise API
+# ☕ Franchise API
 
-This project implements a backend API for managing franchises, branches, and products using **Spring Boot**.
-
-## 🚀 Project Description
-Each **Franchise** has:
-- A name
-- A list of **Branches**
-
-Each **Branch** has:
-- A name
-- A list of **Products**
-
-Each **Product** has:
-- A name
-- A stock quantity
+This project implements a **backend REST API** for managing **franchises, branches, and products** using **Spring Boot**.
+It includes full CRUD operations, stock management, and reporting endpoints (e.g., top-stock products per franchise).
 
 ---
 
-## ⚙️ Features (Acceptance Criteria)
-- [x] Add a new franchise
-- [x] Add a new branch to a franchise
-- [x] Add a new product to a branch
-- [x] Delete a product from a branch
-- [x] Modify a product’s stock
-- [x] Get the product with the highest stock per branch in a franchise
+## 🚀 Project Description
 
-### 🧩 Bonus Features
-- [ ] Update franchise name
-- [ ] Update branch name
-- [ ] Update product name
-- [ ] Cloud deployment (optional)
-- [ ] Infrastructure as code (Terraform, CloudFormation)
-- [ ] Functional or reactive programming (optional)
+Each **Franchise** has:
+
+* A name
+* A list of **Branches**
+
+Each **Branch** has:
+
+* A name
+* A city
+* A list of **Products**
+
+Each **Product** has:
+
+* A name
+* A price
+* A stock quantity
+* A category
 
 ---
 
 ## 🧰 Tech Stack
-- **Language:** Java 17+  
-- **Framework:** Spring Boot 3.x  
-- **Database:** H2 (in-memory)  
-- **Build Tool:** Maven  
-- **Version Control:** Git + GitHub  
-- **Containerization:** Docker (optional)
+
+* **Language:** Java 17+
+* **Framework:** Spring Boot 3.5.6
+* **Database:** MySQL (production) / H2 (testing)
+* **Build Tool:** Maven
+* **Version Control:** Git + GitHub
+* **Containerization:** Docker
+* **Testing:** JUnit 5 + Mockito + MockMvc + H2 (integration tests)
+* **Coverage:** JaCoCo
 
 ---
 
-## 🧑‍💻 Local Setup Instructions
+## ⚙️ Local Setup Instructions
 
 ### 1️⃣ Clone the repository
+
 ```bash
 git clone https://github.com/sntgcrdn/franchise-api.git
 cd franchise-api
 ```
 
 ### 2️⃣ Build and run the project
+
 ```bash
-./mvnw spring-boot:run
+mvn clean package
+mvn spring-boot:run   # Run locally (without Docker)
 ```
 
-### 3️⃣ Access the API
-Default URL:  
+### 3️⃣ Run with Docker
+
+```bash
+docker build -t franchise-api .
+docker run -p 8080:8080 franchise-api
+```
+
+### 4️⃣ Run tests
+
+```bash
+mvn test
+```
+
+🧩 Test coverage report:
+
+```
+target/site/jacoco/index.html
+```
+
+### 5️⃣ Access the API
+
 ```
 http://localhost:8080
 ```
 
 ---
 
-## 🧱 Example Endpoints
+## 🌐 Endpoints
 
-| Method | Endpoint | Description |
-|--------|-----------|-------------|
-| POST | `/api/franchises` | Add new franchise |
-| POST | `/api/franchises/{id}/branches` | Add branch to franchise |
-| POST | `/api/franchises/{id}/branches/{branchId}/products` | Add product to branch |
-| DELETE | `/api/franchises/{id}/branches/{branchId}/products/{productId}` | Delete product |
-| PUT | `/api/franchises/{id}/branches/{branchId}/products/{productId}` | Update product stock |
-| GET | `/api/franchises/{id}/top-products` | Get product with highest stock per branch |
+### 🏢 Franchise Endpoints
+
+| Method | Endpoint                              | Description                                              |
+| ------ | ------------------------------------- | -------------------------------------------------------- |
+| GET    | `/franchises`                         | Get all franchises                                       |
+| GET    | `/franchises/{id}`                    | Get a franchise by ID                                    |
+| POST   | `/franchises`                         | Create a new franchise                                   |
+| PUT    | `/franchises/{id}`                    | Update franchise data (name, owner, etc.)                |
+| PATCH  | `/franchises/{id}/updatename`         | Update only the franchise name                           |
+| DELETE | `/franchises/{id}`                    | Delete a franchise                                       |
+| GET    | `/franchises/{id}/top-stock-products` | Get the top-stock product for each branch in a franchise |
 
 ---
 
-## 🧩 Database Configuration (Option 1: In-Memory H2)
-This project uses **H2 Database** to simplify setup during development.
+### 🏪 Branch Endpoints
 
-### Configuration (`application.properties`)
+| Method | Endpoint                    | Description                 |
+| ------ | --------------------------- | --------------------------- |
+| GET    | `/branches`                 | Get all branches            |
+| GET    | `/branches/{id}`            | Get a branch by ID          |
+| POST   | `/branches`                 | Create a new branch         |
+| PUT    | `/branches/{id}`            | Update branch details       |
+| PATCH  | `/branches/{id}/updatename` | Update only the branch name |
+| DELETE | `/branches/{id}`            | Delete a branch             |
+
+---
+
+### 📦 Product Endpoints
+
+| Method | Endpoint                    | Description                   |
+| ------ | --------------------------- | ----------------------------- |
+| GET    | `/products`                 | Get all products              |
+| GET    | `/products/{id}`            | Get a product by ID           |
+| POST   | `/products`                 | Create a new product          |
+| PUT    | `/products/{id}`            | Update product details        |
+| PATCH  | `/products/{id}/stock`      | Update only the product stock |
+| PATCH  | `/products/{id}/updatename` | Update only the product name  |
+| DELETE | `/products/{id}`            | Delete a product              |
+
+---
+
+## ⚙️ Configuration (`application.properties`)
+
 ```properties
+# --- Database Configuration (H2 for local/integration testing) ---
 spring.datasource.url=jdbc:h2:mem:franchise_db
 spring.datasource.driverClassName=org.h2.Driver
 spring.datasource.username=sa
 spring.datasource.password=
 spring.h2.console.enabled=true
 spring.h2.console.path=/h2-console
+
+# --- Hibernate / JPA ---
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
 ```
 
-### Access H2 Console
+---
+
+## 🧩 H2 Console Access
+
 ```
 http://localhost:8080/h2-console
 ```
-Use the same JDBC URL as above.
 
----
+Use the same JDBC URL as above:
 
-## 🐳 Run with Docker (optional)
-```bash
-docker build -t franchise-api .
-docker run -p 8080:8080 franchise-api
+```
+jdbc:h2:mem:franchise_db
 ```
 
 ---
 
-## 🧾 Git Usage Workflow
+## 🧪 Running Integration Tests with H2
 
-### Initialize local repository
-```bash
-git init
-git add .
-git commit -m "Initial commit"
+Integration tests are configured to use an **in-memory H2 database**.
+This ensures isolation from production data and faster test execution.
+
+### ✅ Create the file `src/test/resources/application-test.properties`
+
+```properties
+spring.datasource.url=jdbc:h2:mem:testdb
+spring.datasource.driverClassName=org.h2.Driver
+spring.datasource.username=sa
+spring.datasource.password=
+spring.jpa.hibernate.ddl-auto=create-drop
+spring.jpa.show-sql=false
+spring.jpa.properties.hibernate.format_sql=true
 ```
 
-### Add remote repository
-```bash
-git remote add origin https://github.com/sntgcrdn/franchise-api.git
-git branch -M main
-git push -u origin main
+### ✅ Annotate your integration test classes with:
+
+```java
+@SpringBootTest
+@ActiveProfiles("test")
 ```
 
-### Update repository
-```bash
-git add .
-git commit -m "Update project"
-git push
-```
+This tells Spring Boot to load the test configuration automatically.
+When you run `mvn test`, all integration tests will use the H2 database in memory.
 
 ---
 
 ## 🧠 Author
-**Santiago Cardona**  
-📍 El Carmen de Viboral, Antioquia, Colombia  
+
+**Santiago Cardona**
 📧 [sntgcrdnq@gmail.com](mailto:sntgcrdnq@gmail.com)
+💼 GitHub: [@sntgcrdn](https://github.com/sntgcrdn)
 
 ---
 
-## 🧩 License
-MIT License © 2025 Santiago Cardona
+## 🗾 License
 
+MIT License © 2025
