@@ -188,6 +188,29 @@ When you run `mvn test`, all integration tests will use the H2 database in memor
 
 ---
 
+## 🐳 Docker Image
+
+You can pull and run the latest version of the API directly from **Docker Hub**.
+
+### 🏷️ Available Versions
+
+| Tag | Description | Pull Command |
+|-----|--------------|---------------|
+| `latest` | Latest stable release | `docker pull sancar0/franchise-api:latest` |
+| `v1.0.0` | Initial public release | `docker pull sancar0/franchise-api:v1.0.0` |
+
+### ▶️ Run the API with Docker
+
+```bash
+docker run -d -p 8080:8080 sancar0/franchise-api:v1.0.0
+Then access it at: http://localhost:8080
+
+👉 Docker Hub page: https://hub.docker.com/r/sancar0/franchise-api
+```
+---
+
+---
+
 ## 📬 Postman Collection
 
 You can test the API endpoints using Postman.
