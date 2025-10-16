@@ -1,0 +1,325 @@
+{
+    "info": {
+      "name": "Franchise API",
+      "description": "Postman collection for testing the Franchise API (Franchises, Branches, and Products).",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+      "_postman_id": "7f4f4c0b-25a3-4a0a-9cf4-d5d2dcd8fcb6"
+    },
+    "item": [
+      {
+        "name": "🏢 Franchises",
+        "item": [
+          {
+            "name": "Get all franchises",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{baseUrl}}/franchises",
+                "host": ["{{baseUrl}}"],
+                "path": ["franchises"]
+              }
+            }
+          },
+          {
+            "name": "Get franchise by ID",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{baseUrl}}/franchises/1",
+                "host": ["{{baseUrl}}"],
+                "path": ["franchises", "1"]
+              }
+            }
+          },
+          {
+            "name": "Create franchise",
+            "request": {
+              "method": "POST",
+              "header": [
+                { "key": "Content-Type", "value": "application/json" }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"name\": \"Nequi Coffee\",\n  \"owner\": \"Santiago Cardona\",\n  \"country\": \"Colombia\"\n}"
+              },
+              "url": {
+                "raw": "{{baseUrl}}/franchises",
+                "host": ["{{baseUrl}}"],
+                "path": ["franchises"]
+              }
+            }
+          },
+          {
+            "name": "Update franchise",
+            "request": {
+              "method": "PUT",
+              "header": [
+                { "key": "Content-Type", "value": "application/json" }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"name\": \"Nequi Coffee Updated\",\n  \"owner\": \"Santiago C.\",\n  \"country\": \"Colombia\"\n}"
+              },
+              "url": {
+                "raw": "{{baseUrl}}/franchises/1",
+                "host": ["{{baseUrl}}"],
+                "path": ["franchises", "1"]
+              }
+            }
+          },
+          {
+            "name": "Patch franchise name",
+            "request": {
+              "method": "PATCH",
+              "header": [
+                { "key": "Content-Type", "value": "application/json" }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"name\": \"Nequi Coffee Express\"\n}"
+              },
+              "url": {
+                "raw": "{{baseUrl}}/franchises/1/updatename",
+                "host": ["{{baseUrl}}"],
+                "path": ["franchises", "1", "updatename"]
+              }
+            }
+          },
+          {
+            "name": "Get top stock products by franchise",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{baseUrl}}/franchises/1/top-stock-products",
+                "host": ["{{baseUrl}}"],
+                "path": ["franchises", "1", "top-stock-products"]
+              }
+            }
+          },
+          {
+            "name": "Delete franchise",
+            "request": {
+              "method": "DELETE",
+              "header": [],
+              "url": {
+                "raw": "{{baseUrl}}/franchises/1",
+                "host": ["{{baseUrl}}"],
+                "path": ["franchises", "1"]
+              }
+            }
+          }
+        ]
+      },
+      {
+        "name": "🏪 Branches",
+        "item": [
+          {
+            "name": "Get all branches",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "{{baseUrl}}/branches",
+                "host": ["{{baseUrl}}"],
+                "path": ["branches"]
+              }
+            }
+          },
+          {
+            "name": "Get branch by ID",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "{{baseUrl}}/branches/1",
+                "host": ["{{baseUrl}}"],
+                "path": ["branches", "1"]
+              }
+            }
+          },
+          {
+            "name": "Create branch",
+            "request": {
+              "method": "POST",
+              "header": [
+                { "key": "Content-Type", "value": "application/json" }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"name\": \"Sucursal Medellín\",\n  \"city\": \"Medellín\",\n  \"address\": \"Cra 43A #1-50\",\n  \"franchiseId\": 1\n}"
+              },
+              "url": {
+                "raw": "{{baseUrl}}/branches",
+                "host": ["{{baseUrl}}"],
+                "path": ["branches"]
+              }
+            }
+          },
+          {
+            "name": "Update branch",
+            "request": {
+              "method": "PUT",
+              "header": [
+                { "key": "Content-Type", "value": "application/json" }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"name\": \"Sucursal Bogotá\",\n  \"city\": \"Bogotá\",\n  \"address\": \"Calle 80 #10-20\",\n  \"franchiseId\": 1\n}"
+              },
+              "url": {
+                "raw": "{{baseUrl}}/branches/1",
+                "host": ["{{baseUrl}}"],
+                "path": ["branches", "1"]
+              }
+            }
+          },
+          {
+            "name": "Patch branch name",
+            "request": {
+              "method": "PATCH",
+              "header": [
+                { "key": "Content-Type", "value": "application/json" }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"name\": \"Sucursal Centro\"\n}"
+              },
+              "url": {
+                "raw": "{{baseUrl}}/branches/1/updatename",
+                "host": ["{{baseUrl}}"],
+                "path": ["branches", "1", "updatename"]
+              }
+            }
+          },
+          {
+            "name": "Delete branch",
+            "request": {
+              "method": "DELETE",
+              "url": {
+                "raw": "{{baseUrl}}/branches/1",
+                "host": ["{{baseUrl}}"],
+                "path": ["branches", "1"]
+              }
+            }
+          }
+        ]
+      },
+      {
+        "name": "📦 Products",
+        "item": [
+          {
+            "name": "Get all products",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "{{baseUrl}}/products",
+                "host": ["{{baseUrl}}"],
+                "path": ["products"]
+              }
+            }
+          },
+          {
+            "name": "Get product by ID",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "{{baseUrl}}/products/1",
+                "host": ["{{baseUrl}}"],
+                "path": ["products", "1"]
+              }
+            }
+          },
+          {
+            "name": "Create product",
+            "request": {
+              "method": "POST",
+              "header": [
+                { "key": "Content-Type", "value": "application/json" }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"name\": \"Café de origen\",\n  \"price\": 12500.0,\n  \"category\": \"Café\",\n  \"stock\": 15,\n  \"branchId\": 1\n}"
+              },
+              "url": {
+                "raw": "{{baseUrl}}/products",
+                "host": ["{{baseUrl}}"],
+                "path": ["products"]
+              }
+            }
+          },
+          {
+            "name": "Update product",
+            "request": {
+              "method": "PUT",
+              "header": [
+                { "key": "Content-Type", "value": "application/json" }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"name\": \"Café de origen especial\",\n  \"price\": 14500.0,\n  \"category\": \"Café premium\",\n  \"stock\": 20,\n  \"branchId\": 1\n}"
+              },
+              "url": {
+                "raw": "{{baseUrl}}/products/1",
+                "host": ["{{baseUrl}}"],
+                "path": ["products", "1"]
+              }
+            }
+          },
+          {
+            "name": "Patch product stock",
+            "request": {
+              "method": "PATCH",
+              "header": [
+                { "key": "Content-Type", "value": "application/json" }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"stock\": 30\n}"
+              },
+              "url": {
+                "raw": "{{baseUrl}}/products/1/stock",
+                "host": ["{{baseUrl}}"],
+                "path": ["products", "1", "stock"]
+              }
+            }
+          },
+          {
+            "name": "Patch product name",
+            "request": {
+              "method": "PATCH",
+              "header": [
+                { "key": "Content-Type", "value": "application/json" }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"name\": \"Café Supremo\"\n}"
+              },
+              "url": {
+                "raw": "{{baseUrl}}/products/1/updatename",
+                "host": ["{{baseUrl}}"],
+                "path": ["products", "1", "updatename"]
+              }
+            }
+          },
+          {
+            "name": "Delete product",
+            "request": {
+              "method": "DELETE",
+              "url": {
+                "raw": "{{baseUrl}}/products/1",
+                "host": ["{{baseUrl}}"],
+                "path": ["products", "1"]
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "variable": [
+      {
+        "key": "baseUrl",
+        "value": "http://localhost:8080"
+      }
+    ]
+  }

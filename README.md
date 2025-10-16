@@ -69,7 +69,7 @@ docker run -p 8080:8080 franchise-api
 mvn test
 ```
 
-🧩 Test coverage report:
+🧹 Test coverage report:
 
 ```
 target/site/jacoco/index.html
@@ -145,7 +145,7 @@ spring.jpa.properties.hibernate.format_sql=true
 
 ---
 
-## 🧩 H2 Console Access
+## 🥉 H2 Console Access
 
 ```
 http://localhost:8080/h2-console
@@ -188,6 +188,29 @@ When you run `mvn test`, all integration tests will use the H2 database in memor
 
 ---
 
+## 📬 Postman Collection
+
+You can test the API endpoints using Postman.
+A ready-to-use collection is included in:
+
+```
+/postman/FranchiseAPI.postman_collection.json
+```
+
+### Import Instructions
+
+1. Open **Postman**
+2. Click **Import** → select the JSON file
+3. Make sure your API is running (Docker or local)
+4. Set the variable:
+
+   ```
+   baseUrl = http://localhost:8080
+   ```
+5. Run the requests for franchises, branches, and products
+
+---
+
 ## 🧠 Author
 
 **Santiago Cardona**
@@ -196,6 +219,6 @@ When you run `mvn test`, all integration tests will use the H2 database in memor
 
 ---
 
-## 🗾 License
+## 🟞 License
 
 MIT License © 2025
